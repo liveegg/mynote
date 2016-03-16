@@ -5,4 +5,6 @@
 - 박나영
 - 장동석
 
-hello!
+# Hello MyNote!
+
+hello python!
