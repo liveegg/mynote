@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Diary View</title>
+
+</head>
+<body>
+	{% include 'header.html' %}
+
+	<div class="jumbotron">
+      <div class="container">
+        <h1># My Diary</h1>
+        <p><h5>게시판 형식의 다이어리로 간단한 메모나 기억해야 할 사항들까지 편리하게 작성 가능합니다.</h5></p>
+      </div>
+    </div>
+    
+    <h3 class="sub-header"><span class="glyphicon glyphicon-zoom-in"> Diary View</span></h3>
+    
+    <form class="form-horizontal">
+  		<div class="form-group">
+			<label class="col-sm-2 control-label">번호</label>
+    		<div class="col-sm-10">
+      			<p class="form-control-static">1</p>
+   		 	</div>
+   		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">제목</label>
+    		<div class="col-sm-10">
+      			<p class="form-control-static">엄마</p>
+   		 	</div>
+   		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">내용</label>
+    		<div class="col-sm-10">
+      			<p class="form-control-static">보고싶다........</p>
+   		 	</div>
+   		</div>
+		<button type="button" class="btn btn-primary btn-xs">목록</button>
+		<button type="button" class="btn btn-default btn-xs">수정</button>
+		<button type="button" class="btn btn-default btn-xs">삭제</button>
+	</form>
+</body>
+</html>
