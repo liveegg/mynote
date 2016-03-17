@@ -6,5 +6,3 @@
 - 장동석
 
 hello!
-
-hello python!
