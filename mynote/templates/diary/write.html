@@ -2,32 +2,36 @@
 <html>
 <head>
 	<title>Write Diary</title>
+	
+	<script>
+		function write_check() {			
+			$.ajax({
+				url	: '/diary/write2'
+				,type : 'POST'
+				,data : {'sTitle' : $("#inputTitle").val()
+						, 'sContent' : $("#inputContent").val()
+				}
+				,success : function(data) {
+					if (data == "True") {
+						alert("등록 성공!");
+						location.href = "/diary/list";
+					} else {
+						alert("등록 실패!");
+					}
+				}
+			});
+		}
+	
+		function move() {			
+			location.href = "/diary/list";
+		}
+	</script>
 
 </head>
+
 <body>
 	{% include 'header.html' %}
 	
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">MyNote</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-home"> Home</span></a></li>
-            <li><a href="diary/diary.html"><span class="glyphicon glyphicon-book"> Diary</span></a></li>
-            <li><a href="file/file.html"><span class="glyphicon glyphicon-inbox"> File</span></a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
 	<div class="jumbotron">
       <div class="container">
         <h1># My Diary</h1>
@@ -40,15 +44,17 @@
 	<form>
 		<div class="form-group">
 			<label for="InputTitle">제목</label> <input type="text"
-				class="form-control" id="InputTitle"
-				placeholder="제목을 입력하세요">
+				class="form-control" id="inputTitle"
+				placeholder="제목을 입력하세요.">
 		</div>
 		<div class="form-group">
 			<label for="InputContent">내용</label>
-			<textarea class="form-control" id="InputContent" placeholder="내용을 입력하세요" rows="10"></textarea>
+			<textarea class="form-control" id="inputContent" placeholder="내용을 입력하세요." rows="10"></textarea>
 		</div>
-		<button type="button" class="btn btn-primary btn-xs">등록</button>
-		<button type="button" class="btn btn-default btn-xs">취소</button>
+		<!-- <button type="button" class="btn btn-primary btn-xs" onclick="javascript:move();">등록</button>
+		<button type="button" class="btn btn-default btn-xs" onclick="javascript:move();">취소</button> -->
+		<input type="button" class="btn btn-primary btn-xs" value="등록" onclick="javascript:write_check();"/>
+		<input type="button" class="btn btn-primary btn-xs" value="취소" onclick="javascript:move();"/>
 	</form>
 
 </body>

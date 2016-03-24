@@ -7,12 +7,13 @@
 """
 
 import sys
+from simulation import create_app 
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from mynote import app
+application = create_app() 
 
 if __name__ == '__main__':
     # Run a test server.
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)
+    application.run(host='0.0.0.0', port=5000, debug=True,  use_reloader=True)
