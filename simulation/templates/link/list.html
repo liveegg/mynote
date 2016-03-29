@@ -1,0 +1,128 @@
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}" type="text/css" media="screen" charset="UTF-8" />
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-theme.min.css') }}" type="text/css" media="screen" charset="UTF-8" />
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/jquery-ui.css') }}" type="text/css" media="screen" charset="UTF-8" />
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/link.css') }}" type="text/css" media="screen" charset="UTF-8" />
+	<script type="text/javascript" src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static',filename='js/jquery-ui.js') }}"></script>
+</head>
+<body>
+<div class="main-container">	
+	<div id="open_market_tree" class="tree well" style="float: left;">
+	<h3>오픈마켓 카테고리{{a}}</h3>
+<!--	
+	<div style="text-align: right;">
+		<button class="btn btn-primary">전체 닫기</button>
+	</div>
+-->
+		<ul>
+		<?php foreach($category as $h_idx => $h_val) { ?>			
+			<li>
+				<div><i class="icon-folder-open"></i> <?php echo $h_idx; ?></div>
+				<?php if(isset($h_val)) { ?>
+				<ul>
+				<?php foreach($h_val as $m_idx => $m_val) { ?>
+					<li>
+						<div><i class="icon-minus-sign"></i> <?php echo $m_idx; ?></div>
+						<?php if(isset($m_val)) { ?>
+						<ul>
+						<?php foreach($m_val as $n_idx => $n_val) { ?>							
+							<li>
+								<div class="<?php if(isset($n_val['leaf'])) { echo "div-leaf"; } else { echo "div-noleaf"; }?>" catecode="<?php if(isset($n_val['leaf'])) { echo $n_val['leaf']; }?>"><i class="<?php if(isset($n_val['leaf'])) { echo "icon-leaf"; } else { echo "icon-minus-sign"; }?>"></i> <?php echo $n_idx; ?></div>
+								<?php if(isset($n_val) && !isset($n_val['leaf'])) { ?>
+								<ul>
+									<?php foreach($n_val as $o_idx => $o_val) { ?>							
+									<li>
+										<div class="<?php if(isset($o_val['leaf'])) { echo "div-leaf"; } else { echo "div-noleaf"; }?>" catecode="<?php if(isset($o_val['leaf'])) { echo $o_val['leaf']; }?>"><i class="<?php if(isset($o_val['leaf'])) { echo "icon-leaf"; } else { echo "icon-minus-sign"; }?>"></i> <?php echo $o_idx; ?></div>
+									</li>
+									<? } ?>
+								</ul>
+								<? } ?>
+							</li>
+						<? } ?>
+						</ul>
+						<? } ?>
+					</li>
+				<? } ?>	
+				</ul>
+				<? } ?>
+			<li>
+		<? } ?>	
+		</ul>
+	</div>
+	<div id="danawa_category_tree" class="tree well" style="float: right;">
+	<h3>카테고리4</h3>
+		<ul>
+			<li>
+				<div><i class="icon-folder-open"></i> (다나와)스포츠</div>
+				<ul>					
+					<li>
+						<div><i class="icon-minus-sign"></i> (다나와)등산</div>
+						<ul>							
+							<li>
+								<div><i class="icon-minus-sign"></i> (다나와)등산화</div>
+								<ul>
+									<li>
+										<div><i class="icon-leaf"></i> (다나와)트레킹화</div>
+									</li>									
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+<script type="text/javascript" >
+$(function () {
+/*	
+	$('.tree li div').mouseover(function(){  	
+		$(this).css('background', 'LightGray');
+	}).mouseleave(function(){  	
+		$(this).css('background', 'none');
+	});   
+*/
+    $('.tree li div.div-leaf').draggable({
+		revert : "invalid",
+		helper: "clone"
+	});
+	$('.tree li div').droppable({  		
+		hoverClass: "ui-state-active",
+		greedy: true,
+		drop: function( event, ui ) {			
+			alert(ui.draggable.text() + " >>> " + $(this).get(0).innerText);
+		}   
+	});
+    $('.tree li:has(ul)').addClass('parent_li').find(' > div').attr('title', 'Collapse this branch');
+    $('.tree li.parent_li > div').on('click', function (e) {
+        var children = $(this).parent('li.parent_li').find(' > ul > li');
+        if (children.is(":visible")) {
+            children.hide('fast');
+            $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+        } else {
+            children.show('fast');
+            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+        }
+        e.stopPropagation();
+    });
+	var children = $('#open_market_tree li.parent_li').find(' > ul > li');
+	children.hide('fast');
+	$('.btn-primary').on('click', function () {		
+		var children = $('#open_market_tree li.parent_li').find(' > ul > li');
+		if($(this).get(0).innerText == "전체 보기") {		
+			children.show('fast');
+			$(this).get(0).innerText = "전체 닫기";
+		} else {
+			children.hide('fast');
+			$(this).get(0).innerText = "전체 보기";
+		}
+	});
+	$(window).scroll(function() {
+		$('#danawa_category_tree').animate({top:$(window).scrollTop()+"px" },{queue: false, duration: 150});
+	});	
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Diary List</title>
+	
+	<script>
+		function move() {			
+			location.href = "/diary/write";
+		}
+	
+	    
+		function remove(numId){
+			if (confirm("삭제하시겠습니까?") == true){   
+					$.ajax({
+		   				url : '/diary/remove/'+ numId
+		   				,type : 'GET'
+		   				, success : function(result){
+			   				if (result == "True"){   
+					   				alert("삭제 성공!");
+					   				location.href = "/diary/list";
+							}else{
+									alert("삭제 실패!");
+								    location.href = "/diary/list";
+							}
+					    }
+					});
+				} else {
+				    location.href = "/diary/list";
+				}
+   		}
+   		
+	</script>
+	
+</head>
+<body>
+	{% include 'header.html' %}
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1># My Diary</h1>
+        <p><h5>게시판 형식의 다이어리로 간단한 메모나 기억해야 할 사항들까지 편리하게 작성 가능합니다.</h5></p>
+      </div>
+    </div>
+    
+    <h3 class="sub-header"><span class="glyphicon glyphicon-list-alt"> Diary List</span></h3>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="padding-left:25px; width:10%;">번호</th>
+                  <th width="20%">제목</th>
+                  <th width="40%">내용</th>
+                  <th width="10%">작성일</th>
+                  <th width="20%">수정 / 삭제</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+              {% for diary in tDiary %}
+                <tr>
+                  <td style="padding-left:25px; width:10%; height:100px;">{{ diary.nNum }}</td>
+                  <td width="20%" valign="top">
+                  	<div style="position:absolute; width:200px; height:80px; overflow:auto;">
+    					 {{ diary.sTitle }}
+    				</div>
+                  	<!-- <pre class=pre-scrollable style="position:absolute; width:200px; height:80px; overflow:auto;">
+ 						{{ diary.sTitle }}
+ 					</pre> -->
+ 				  </td>
+                  <td width="30%" valign="top">
+					<div style="position:absolute; width:500px; height:80px; overflow:auto;">
+    					 {{ diary.sContent }}
+    				</div>
+    			  </td>	
+                  <td width="20%">{{ diary.dtWriteDate.strftime('%Y-%m-%d %H:%M') }}</td>
+                  <td width="20%">
+                  	<a class="btn btn-success btn-mini" href="/diary/update/{{ diary.nNum }}">
+                  	<span class="glyphicon glyphicon-pencil"></span></a>
+                  	<a class="btn btn-warning btn-mini" href="javascript:remove('{{ diary.nNum }}');">
+                  	<span class="glyphicon glyphicon-remove"></span></a>
+                  </td>
+                </tr>
+               {% endfor %}
+                
+              </tbody>
+            </table>
+          </div>
+          
+         <div class="write-button" align="center">
+          <!-- <button type="button" class="btn btn-primary btn-xs">글쓰기</button> -->
+          <input type="button" class="btn btn-primary btn-xs" value="글쓰기" onclick="javascript:move();"/>
+        </div>
+          
+          
+	    {% if pagination %}
+	        <div class="row-fluid" align="center">
+	            <div class="span12">
+	            <p>
+	                {% from "_pagehelpers.html" import render_pagination %}
+	                {{ render_pagination(pagination) }}
+	            </p>
+	            </div>
+	        </div>
+        {% else %}
+        <!-- do nothing! -->
+        {% endif %}
+</body>
+</html>

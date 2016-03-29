@@ -1,0 +1,110 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/common.css') }}" type="text/css" media="screen" charset="UTF-8" />
+		<script type="text/javascript" src="{{ url_for('static',filename='js/jquery-1.3.2.min.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static',filename='js/jquery.post.js') }}"></script>
+	</head>
+	<body style="padding: 0;margin: 0;">
+		<div class="pop_similar_goods _pop_similar_goods" id="wrap">
+			<div id="pop_header">
+				<h1>
+					<strong class="tit_similar">유사 상품 가격비교</strong>
+					<span class="bar">|</span>
+					<span class="caution">이미지가 비슷한 상품을 모아 낮은가격순으로 제공합니다.</span>
+				</h1>				
+			</div>
+			<div id="pop_container">
+				<div id="pop_content">
+				{% if detail_list_count > 0 %}
+					<div class="search_list basis">					
+						<ul class="goods_list">
+							<li>
+								<div class="img_area">
+									<a class="img">
+										<img width="140" height="140" src="{{ main_prod_info['IMG_URL'] }}"/>
+										<span class="mask"/>
+									</a>								
+								</div>
+								<div class="info">
+									<a class="tit" href="{{ main_prod_info['LINK_URL_M'] }}" target="_blank">
+										{{ main_prod_info['LINK_PROD_N'] }}
+									</a>
+									<span class="price">
+										<em>
+											<span class="num _price_reload">{{ main_prod_info['PRICE'] }}</span>원
+										</em>
+										<span class="dot"></span>
+										<span class="price_total">
+											<span class="price_num">총 {{ detail_list_count }}개</span>의 비슷한 상품중 최저가
+										</span>											
+									</span>
+									<span class="depth">
+										판매몰 : <span style="font-weight:bold;">{{ main_prod_info['SHOP_N'] }}</span>
+									</span>
+									<br/>
+									<span class="depth">
+										<span style="font-weight:bold;">{{ main_prod_info['CATE_INFO'] }}</span>
+									</span>
+								</div>
+								<div class="info_mall">
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="similar_lst_area">
+						<div class="search_list basis">
+							<ul class="goods_list">
+							{% for key, val in detail_list.iteritems() %}
+								{% if val['LINK_PROD_C'] == main_prod_info['LINK_PROD_C'] and val['CMPNY_C'] == main_prod_info['CMPNY_C'] %}
+								{% else %}
+								<li>
+									<div class="img_area">
+										<a class="img">
+											<img width="140" height="140" src="{{ val['IMG_URL'] }}"/>										
+										</a>								
+									</div>
+									<div class="info">
+										<a class="tit" href="{{ val['LINK_URL_M'] }}" target="_blank">
+											{{ val['LINK_PROD_N'] }}
+										</a>
+										<span class="price">
+											<em>
+												<span class="num _price_reload">{{ val['PRICE'] }}</span>원
+											</em>											
+										</span>	
+										<br/>
+										<span>{{ val['CATE_INFO'] }}</span>
+									</div>
+									<div class="info_mall">
+										판매몰 : <span style="font-weight:bold;">{{ val['SHOP_N'] }}</span>
+									</div>
+								</li>
+								{% endif %}
+							{% endfor %}
+							</ul>
+						</div>
+					</div>
+			{% else %}
+				<div style="height:100px;vertical-align:middle;text-align: center;">
+					<h1>유사 상품이 없습니다.</h1>
+				</div>
+			{% endif %}
+				</div>		
+				<div id="pop_footer">
+					<div class="btn_area2">
+						<a class="clse _close" href="#">닫기</a>
+					</div>
+				</div>
+			</div>
+			<a class="btn_pop_close _close" href="#">유사 상품 가격비교 닫기</a>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('._close').click(function(){
+					window.close();
+				});
+			});
+		</script>
+	</body>
+</html>

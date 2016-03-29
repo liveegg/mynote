@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Upload</title>
+
+	<script>
+		function file_check(result) {	
+			if (confirm("파일을 등록 하시겠습니까?") == true){   			
+				if (result == "True") {
+					alert("등록 성공!");
+					location.href = "/file/list";
+				} else {
+					alert("등록 실패!");
+				}
+			} else {
+			location.href = "/file/list";
+			}
+		}
+		
+		
+		function remove(numId){
+			if (confirm("삭제하시겠습니까?") == true){   
+					$.ajax({
+		   				url : '/file/remove/'+ numId
+		   				,type : 'GET'
+		   				, success : function(result){
+			   				if (result == "True"){   
+					   				alert("삭제 성공!");
+					   				location.href = "/file/list";
+							}else{
+									alert("삭제 실패!");
+								    location.href = "/file/list";
+							}
+					    }
+					});
+			} else {
+				    location.href = "/file/list";
+			}
+		}
+	</script>
+	
+</head>
+<body>
+	{% include 'header.html' %}
+	
+    <div class="jumbotron">
+      <div class="container">
+        <h1># My File</h1>
+        <p><h5>중요한 이미지 파일들을 업로드하여 보관할 수 있고, 다운로드하여 저장 할 수 있습니다.</h5></p>
+      </div>
+    </div>
+    
+    <!-- 파일 업로드 -->
+	<form action="/file/upload2" method="post" enctype="multipart/form-data">
+	    <h3 class="sub-header"><span class="glyphicon glyphicon-download-alt"> File Upload</span></h3>
+	    <div class="form-group" >
+	    	<label for="exampleInputFile" >파일 업로드</label>
+	    	<div class="fileupload-preview thumbnail" style="width: 200px; height: 150px;">
+	    	 
+	        </div>
+	    	<input type="file" name="fileName" id="inputFile">
+	  	</div>
+		 
+	  	<input type="submit" class="btn btn-primary btn-xs" onclick="javascript:file_check();" value="등록"/> 
+	  	<!-- <button type="button" class="btn btn-primary btn-xs">등록</button> -->
+	  	<br><br><br><br>
+	</form>
+  	
+  	<h3 class="sub-header"><span class="glyphicon glyphicon-picture"> File List</span></h3>
+  	<br>
+  	 <!-- 이미지 목록 -->
+   	  <div class="row">
+        <div class="col-md-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>image1</h2>
+          
+          <!-- <button type="button" class="btn btn-primary btn-xs">삭제</button> -->
+        </div>
+        <div class="col-md-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>image2</h2>
+          <button type="button" class="btn btn-primary btn-xs">삭제</button>
+        </div>
+       	<div class="col-md-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>image3</h2>
+          <button type="button" class="btn btn-primary btn-xs">삭제</button>
+        </div>
+      </div><!-- /.row -->
+	<hr>
+
+</body>
+</html>

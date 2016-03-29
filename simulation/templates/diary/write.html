@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Write Diary</title>
+	
+	<script>
+		function write_check() {	
+			if (confirm("등록 하시겠습니까?") == true){   			
+				$.ajax({
+					url	: '/diary/write2'
+					,type : 'POST'
+					,data : {'sTitle' : $("#inputTitle").val()
+							, 'sContent' : $("#inputContent").val()
+					}
+					,success : function(data) {
+						if (data == "True") {
+							alert("등록 성공!");
+							location.href = "/diary/list";
+						} else {
+							alert("등록 실패!");
+						}
+					}
+				});
+			} else {
+				location.href = "/diary/list";
+			}	
+		}
+		
+		
+	 	function update(numId) {		
+			if (confirm("수정 하시겠습니까?") == true){   	
+				$.ajax({
+					url	: '/diary/update/'+ numId
+					,type : 'POST'
+					,data : {'sTitle' : $("#inputTitle").val()
+							, 'sContent' : $("#inputContent").val()
+					}
+					,success : function(data) {
+						if (data == "True") {
+							alert("수정 성공!");
+							location.href = "/diary/list";
+						} else {
+							alert("수정 실패!");
+						}
+					}
+				});
+			} else {
+				location.href = "/diary/list";
+			}	
+		}
+		
+	
+		function move() {			
+			location.href = "/diary/list";
+		}
+	</script>
+
+</head>
+
+<body>
+	{% include 'header.html' %}
+	
+	<div class="jumbotron">
+      <div class="container">
+        <h1># My Diary</h1>
+        <p><h5>게시판 형식의 다이어리로 간단한 메모나 기억해야 할 사항들까지 편리하게 작성 가능합니다.</h5></p>
+      </div>
+    </div>
+
+	<h3 class="sub-header"><span class="glyphicon glyphicon-pencil"> Diary Write</span></h3>
+		
+	<form>
+		{% if diary %}
+			<div class="form-group">
+				<label for="InputTitle">제목</label> 
+				<input type="text" class="form-control" id="inputTitle" value={{ diary.sTitle }}>
+			</div>
+			<div class="form-group">
+				<label for="InputContent">내용</label>
+				<textarea class="form-control" id="inputContent" rows="10">{{ diary.sContent }}</textarea>
+			</div>
+		{% else %}
+			<div class="form-group">
+				<label for="InputTitle">제목</label> <input type="text"
+					class="form-control" id="inputTitle"
+					placeholder="제목을 입력하세요.">
+			</div>
+			<div class="form-group">
+				<label for="InputContent">내용</label>
+				<textarea class="form-control" id="inputContent" placeholder="내용을 입력하세요." rows="10"></textarea>
+			</div>
+		{% endif %}
+
+		{% if diary %}
+			<input type="button" class="btn btn-primary btn-xs" value="완료" onclick="javascript:update('{{ diary.nNum }}');"/>
+		{% else %}
+			<input type="button" class="btn btn-primary btn-xs" value="완료" onclick="javascript:write_check();"/>
+		{% endif %}
+			<input type="button" class="btn btn-primary btn-xs" value="취소" onclick="javascript:move();"/>
+	</form>
+
+</body>
+</html>
