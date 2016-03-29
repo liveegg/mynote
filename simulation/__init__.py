@@ -65,7 +65,7 @@ def create_app(config_filepath='resource/config.cfg'):
 
     # 뷰 함수 모듈은 어플리케이션 객체 생성하고 블루프린트 등록전에 
     # 뷰 함수가 있는 모듈을 임포트해야 해당 뷰 함수들을 인식할 수 있음
-    from simulation.controller import link, register_user, login, diary_list, diary_write, file_list
+    from simulation.controller import register_user, login, diary_list, diary_write, file_list
 
     from simulation.simulation_blueprint import simulationlog
     simulation_app.register_blueprint(simulationlog)

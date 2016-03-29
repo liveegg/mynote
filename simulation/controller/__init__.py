@@ -6,4 +6,4 @@
     
 """
 
-__all__ = ['link', 'register_user', 'diary_list', 'login', 'file_list', 'diary_write', 'diary_view']
+__all__ = ['register_user', 'diary_list', 'login', 'file_list', 'diary_write', 'diary_view']

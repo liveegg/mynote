@@ -10,4 +10,4 @@
 from sqlalchemy.ext.declarative import declarative_base 
 Base = declarative_base() 
 
-__all__ = ['link', 'member', 'diary', 'file']
+__all__ = ['member', 'diary', 'file']
