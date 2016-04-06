@@ -42,8 +42,8 @@ def url_for_other_page(page, category_code):
 def create_app(config_filepath='resource/config.cfg'):
     simulation_app = Flask(__name__)
 
-    # 기본 설정은 PhotologConfig 객체에 정의되있고 운영 환경 또는 기본 설정을 변경을 하려면
-    # 실행 환경변수인 PHOTOLOG_SETTINGS에 변경할 설정을 담고 있는 파일 경로를 설정 
+    # 기본 설정은 SimulationConfig 객체에 정의되있고 운영 환경 또는 기본 설정을 변경을 하려면
+    # 실행 환경변수인 Simulation_SETTINGS에 변경할 설정을 담고 있는 파일 경로를 설정 
     from simulation.simulation_config import SimulationConfig
     simulation_app.config.from_object(SimulationConfig)
     simulation_app.config.from_pyfile(config_filepath, silent=True)
@@ -85,3 +85,4 @@ def create_app(config_filepath='resource/config.cfg'):
     simulation_app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 
     return simulation_app
+

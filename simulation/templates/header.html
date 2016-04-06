@@ -13,8 +13,11 @@
     
     <script>
 	    function logout() {
-				alert("로그아웃 하시겠습니까?");
+	    	if (confirm("로그아웃 하시겠습니까?") == true){ 
 				location.href = "/logout";
+	    	} else {
+	    		document.location.href;
+	    	}
 		}
     </script>
     

@@ -8,7 +8,6 @@
 """
 from functools import wraps
 from sqlalchemy.sql.functions import current_user
-# from controller.register_user import __get_user, UpdateForm, RegisterForm
 from simulation.model.member import Member
 from flask import render_template, request, redirect , url_for, session, current_app, jsonify 
 from wtforms import Form, TextField, PasswordField, HiddenField, validators
@@ -63,69 +62,62 @@ def login_required(f):
 @simulationlog.route('/')
 @login_required
 def index():
-    """로그인이 성공한 다음에 보여줄 초기 페이지"""   
-    return redirect(url_for('.list'))
+    """로그인이 성공한 다음에 보여줄 초기 페이지"""
+
+    return redirect('/diary/list')
 
 
 @simulationlog.route('/login')
 def login_form():
     """아이디/비밀번호 기반의 로그인 화면을 제공함 """
 
-    next_url = request.args.get('next', '')
     regist_sId = request.args.get('regist_sId', '')    
 
-    """
-    Log.info("(%s)next_url is %s" % (request.method, next_url))
-    """
-
     return render_template('/root/login.html',
-                           next_url=next_url,
                            regist_sId=regist_sId)
     
     
 
-@simulationlog.route('/login_ok', methods=['POST'])
+@simulationlog.route('/login', methods=['POST'])
 def login():
     """아이디/비밀번호 기반의 로그인 기능을 제공함
     로그인 성공 시 세션에 사용자 정보를 저장하여 사용함
     """
     form = LoginForm(request.form)
-#     next_url = form.next_url.data
     login_error = None
     
-#     if form.validate():
-    session.permanent = True
-
-    sId = form.sId.data
-    sPassword = form.sPassword.data
-#     next_url = form.next_url.data
-#     Log.info('(%s)next_url is %s' % (request.method, next_url))
+    if form.validate():
+        session.permanent = True
     
-    try:
-        member = category_dao.query(Member).filter_by(sId=sId).first()
+        sId = form.sId.data
+        sPassword = form.sPassword.data
+    #     next_url = form.next_url.data
         
-    except Exception as e:
-        Log.error(str(e))
-        raise e
-        
-        
-    if member:
-        if not check_password_hash(member.sPassword, sPassword):
-            login_error = 'Invalid password'
-            return "False"
+        try:
+            member = category_dao.query(Member).filter_by(sId=sId).first()
+            
+        except Exception as e:
+            Log.error(str(e))
+            raise e
+            
+            
+        if member:
+            if not check_password_hash(member.sPassword, sPassword):
+                login_error = 'Invalid password'
+                return "False"
+            else:
+                # 세션에 추가할 정보를 session 객체의 값으로 추가함
+                # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
+                # 사용자 정보를 구성하여 session 객체에 추가
+                session['user_info'] = member
+    #             if next_url != '':
+    #                 return redirect(next_url)
+    #             else:
+    #                 return redirect(url_for('.index'))
         else:
-            # 세션에 추가할 정보를 session 객체의 값으로 추가함
-            # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
-            # 사용자 정보를 구성하여 session 객체에 추가
-            session['user_info'] = member
-#             if next_url != '':
-#                 return redirect(next_url)
-#             else:
-#                 return redirect(url_for('.index'))
-    else:
-        login_error = 'member does not exist!'
-        return "False"
-    
+            login_error = 'member does not exist!'
+            return "False"
+        
     return "True"
      
 
@@ -136,7 +128,7 @@ def logout():
     
     session.clear()
 
-    return render_template("/root/login.html")
+    return redirect('/login')
 #     return redirect(url_for('.login'))
 
 
@@ -146,18 +138,14 @@ class LoginForm(Form):
                          [validators.Required('사용자명을 입력하세요.'),
                           validators.Length(
                             min=4, 
-                            max=50, 
-                            message='4자리 이상 50자리 이하로 입력하세요.')])
+                            max=50 )])
     
     sPassword = \
         PasswordField('sPassword', 
                       [validators.Required('비밀번호를 입력하세요.'),
                        validators.Length(
                         min=4, 
-                        max=8,
-                        message='4자리 이상 8자리 이하로 입력하세요.'),
-                       validators.EqualTo('sPassword_confirm', 
-                                          message='비밀번호가 일치하지 않습니다.')])
+                        max=8 )])
         
     
     next_url = HiddenField('Next URL')

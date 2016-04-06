@@ -20,10 +20,12 @@ class File(Base):
 
     nNum = Column(Integer, primary_key=True)
     sId = Column(String(30), ForeignKey(Member.sId))
+    sType = Column(String(4), unique=False)
 
     
     
-    def __init__(self, sId):
+    def __init__(self, sId, sType):
         self.sId = sId
+        self.sType = sType
     
     

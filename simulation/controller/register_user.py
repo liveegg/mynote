@@ -3,7 +3,7 @@
     simulation.controller.register_user
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    로그인 확인 데코레이터와 로그인 처리 모듈.
+    회원가입 등록 모듈.
 
 """
 
@@ -25,7 +25,7 @@ def register_user_form():
     return render_template('/root/regist.html')
 
 
-@simulationlog.route('/member/regist', methods=['POST'])
+@simulationlog.route('/regist', methods=['POST'])
 def register_user():
     """simulationlog 사용자 등록을 위한 함수"""
     
@@ -59,7 +59,8 @@ def register_user():
           
         
 def __get_user(sId):
-    # db에서 기존에 있는 id값을 가져옴 
+    
+    # db에 기존에 있는 id값을 가져옴 
     try:
         current_user = category_dao.query(Member).filter_by(sId=sId).first()
               
@@ -91,24 +92,19 @@ class RegisterForm(Form):
                          [validators.Required('사용자명을 입력하세요.'),
                           validators.Length(
                             min=4,
-                            max=10,
-                            message='4자리 이상 10자리 이하로 입력하세요.')])
+                            max=10 )])
     
     sPassword = \
         PasswordField('sPassword',
                       [validators.Required('비밀번호를 입력하세요.'),
                        validators.Length(
                         min=4,
-                        max=8,
-                        message='4자리 이상 8자리 이하로 입력하세요.'),
-                       validators.EqualTo('sPassword_confirm',
-                                          message='비밀번호가 일치하지 않습니다.')])
+                        max=8 )])
         
     sPassword_confirm = PasswordField('Confirm Password')
     
     sId_check = \
-        HiddenField('sId Check',
-                    [validators.Required('사용자명 중복을 확인하세요.')])     
-        
+        HiddenField('sId Check')
+    
         
                   

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
 Created on 2016. 3. 25.
+
+    파일 리스트, 업로드 모듈
   
 @author: re0127
 '''
@@ -28,14 +30,7 @@ def __allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXTENSIONS
   
   
-@simulationlog.route('/file/upload')
-def file_upload_form():
-    """ 사진파일을 업로드 하기 위해 업로드폼 화면으로 전환시켜주는 함수 """
-      
-    return render_template('/file/list.html')
-  
-  
-@simulationlog.route('/file/upload2', methods=['POST'])
+@simulationlog.route('/file/upload', methods=['POST'])
 @login_required
 def upload_photo():
     """ Form으로 파일과 변수들을 DB에 저장하는 함수. """
@@ -43,8 +38,8 @@ def upload_photo():
     form = FileUploadForm(request.form)
             
     # HTTP POST로 요청이 오면 사용자 정보를 등록
-#     if form.validate():  
-        #: Session에 저장된 사용자 정보를 셋팅
+    # if form.validate():  
+    #: Session에 저장된 사용자 정보를 셋팅
     sId = session['user_info'].sId
         
  
@@ -55,11 +50,12 @@ def upload_photo():
     try:
         #: 파일 확장자 검사 : jpg, jpeg, png, gif만 가능
         if upload_photo and __allowed_file(upload_photo.filename):
-            ext = upload_photo.filename.rsplit('.', 1)[-1].lower()
+            sType = upload_photo.filename.rsplit('.', 1)[-1].lower()
+
                 
             try :
             #: 사진에 대한 정보 DB에 저장
-                file = File(sId)
+                file = File(sId, sType)
                 category_dao.add(file)
                 category_dao.commit()
          
@@ -68,19 +64,15 @@ def upload_photo():
                 Log.error("Upload DB error : " + str(e))
                 raise e
                 
-            newfileName = str(file.nNum) + "." + ext 
+            newfileName = str(file.nNum) + "." + sType 
     
-            #: 업로드 폴더 위치는 얻는다.
+            #: 업로드 폴더 위치
             upload_folder = \
                 os.path.join(current_app.root_path, 
                              current_app.config['UPLOAD_FOLDER'])
               
-            upload_photo.save(os.path.join(upload_folder, 
-                                           newfileName))
+            upload_photo.save(os.path.join(upload_folder, newfileName))
                 
-                
-            #: 썸네일을 만든다.sp
-# #             make_thumbnails(filename)
                 
         else:
             raise Exception("File upload error : illegal file.")
@@ -89,14 +81,12 @@ def upload_photo():
         Log.error(str(e))
         raise e
     
-    
-    return "True"
-#     else:
-#         return render_template('upload.html', form=form)
+
+    return redirect('/file/upload')
   
   
-@simulationlog.route('/file/list', defaults={'page': 1})
-@simulationlog.route('/file/list/<int:page>')
+@simulationlog.route('/file/upload', defaults={'page': 1})
+@simulationlog.route('/file/upload/<int:page>')
 @login_required
 def pg_show_all(page=1):    
         
@@ -116,6 +106,8 @@ def pg_show_all(page=1):
                         limit(per_page). \
                         offset(offset). \
                         all()
+                        
+    
         
     return render_template('/file/list.html',
         pagination=pagination,
@@ -167,12 +159,19 @@ def file_remove(file_id):
     """ DB에서 해당 데이터를 삭제한다."""
     
     sId = session['user_info'].sId
-      
+
     try:
         file = category_dao.query(File).filter_by(nNum=str(file_id)).first()
+       
+        newfileName = str(file.nNum) + "." + str(file.sType) 
+        upload_folder = os.path.join(current_app.root_path, 
+                                     current_app.config['UPLOAD_FOLDER'])
+        os.remove(upload_folder + newfileName)
+        
         category_dao.delete(file)
         category_dao.commit()
-    
+        
+        
     except Exception as e:
         category_dao.rollback()
         Log.error("File remove error => " + file_id + ":" + sId + ", " + str(e))
@@ -182,36 +181,12 @@ def file_remove(file_id):
     return "True"
 
 
-# def make_thumbnails(filename):
-#     """ 업로드된 파일은 사이즈가 크기때문에 preview등에 사용하기 위해 
-#         썸네일 이미지를 생성한다.
-#     """
-#     
-#     upload_folder = os.path.join(current_app.root_path, 
-#                                  current_app.config['UPLOAD_FOLDER'])
-#     original_file = upload_folder+filename
-#     target_name = upload_folder+"thumb_"+filename
-#     
-#     try:
-#         #: PIL 라이브러리를 이용하여 썸네일 생성
-#         im = Image.open(original_file)
-#         im = im.convert('RGB')
-#         im.thumbnail((300,300), Image.ANTIALIAS)
-#         im.save(target_name)
-# 
-#     except Exception as e:
-#         Log.error("Thumbnails creation error : " + target_name+" , "+str(e))
-#         raise e
-
-   
-       
 class FileUploadForm(Form):
     """등록 화면에서 확장자를 검증함"""
    
-       
-    sName = TextField('sName', 
+    sType = TextField('sType', 
                             [validators.Length(
                                 min=1, 
-                                max=10 )])
+                                max=4 )])
     
        

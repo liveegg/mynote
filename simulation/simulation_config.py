@@ -17,9 +17,9 @@ class SimulationConfig(object):
     }
     DB_FILE_PATH= 'resource/database/mynote'
     #: 사진 업로드 시 사진이 임시로 저장되는 임시 폴더
-    TMP_FOLDER = 'resource/tmp/'
+    TMP_FOLDER = 'static/resource/tmp/'
     #: 업로드 완료된 사진 파일이 저장되는 폴더
-    UPLOAD_FOLDER = 'resource/upload/'
+    UPLOAD_FOLDER = 'static/resource/upload/'
     #: 업로드되는 사진의 최대 크키(3메가)
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
     #: 세션 타임아웃은 초(second) 단위(60분)
@@ -33,6 +33,6 @@ class SimulationConfig(object):
     #: 디폴트 SQLAlchemy trace log 설정
     DB_LOG_FLAG = 'True' 
     #: 사진 목록 페이징 설정
-    PER_PAGE = 5
+    PER_PAGE = 8
     
     

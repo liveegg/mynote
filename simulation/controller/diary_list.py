@@ -2,6 +2,8 @@
 '''
 Created on 2016. 3. 15.
 
+    다이어리 리스트 모듈
+
 @author: re0127
 '''
 
@@ -37,7 +39,7 @@ def show_all(page=1):
     
     diary_pages = category_dao.query(Diary). \
                         filter_by(sId=sId). \
-                        order_by(Diary.dtWriteDate.desc()). \
+                        order_by(Diary.nNum.desc()). \
                         limit(per_page). \
                         offset(offset). \
                         all()
@@ -92,26 +94,27 @@ def update(diary_id):
 
     form = UploadForm(request.form)
     
-#     if form.validate(): 
+    if form.validate(): 
         #: 업데이트 대상 항목들
-    sTitle = form.sTitle.data
-    sContent = form.sContent.data
-    dtWriteDate = datetime.today()
-    
-    try :
-        #: 변경전 원래의 diary 테이블 값을 읽어 온다.
-        diary = category_dao.query(Diary).filter_by(nNum=diary_id).first()
-        #: 업데이트 값 셋팅
-        diary.sTitle = sTitle
-        diary.sContent = sContent
-        diary.dtWriteDate = dtWriteDate
+        sTitle = form.sTitle.data
+        sContent = form.sContent.data
+        dtWriteDate = datetime.today()
         
-        category_dao.commit()
-
-    except Exception as e:
-        category_dao.rollback()
-        Log.error("Update DB error : " + str(e))
-        raise e
+        try :
+            #: 변경전 원래의 diary 테이블 값을 읽어 온다.
+            diary = category_dao.query(Diary).filter_by(nNum=diary_id).first()
+            #: 업데이트 값 셋팅
+            diary.sTitle = sTitle
+            diary.sContent = sContent
+            diary.dtWriteDate = dtWriteDate
+            
+            category_dao.commit()
+    
+        except Exception as e:
+            category_dao.rollback()
+            Log.error("Update DB error : " + str(e))
+            raise e
+    
     return "True"
 #             return redirect(url_for('.show_all'))
 #     else:
@@ -157,12 +160,10 @@ class UploadForm(Form):
     sTitle = TextField('sTitle', 
                     [validators.Length(
                         min=1, 
-                        max=100, 
-                        message='100자리 이하로 입력하세요.')])
+                        max=100 )])
     sContent = TextAreaField('sContent', 
                             [validators.Length(
                                 min=1, 
-                                max=1000, 
-                                message='1000자리 이하로 입력하세요.')])
+                                max=1000 )])
 
     dtWriteDate = HiddenField('Write Date')

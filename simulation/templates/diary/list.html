@@ -24,9 +24,9 @@
 							}
 					    }
 					});
-				} else {
-				    location.href = "/diary/list";
-				}
+			} else {
+			    location.href = "/diary/list";
+			}
    		}
    		
 	</script>
@@ -42,7 +42,8 @@
       </div>
     </div>
     
-    <h3 class="sub-header"><span class="glyphicon glyphicon-list-alt"> Diary List</span></h3>
+    <h3 class="sub-header"><span class="glyphicon glyphicon-list-alt" style="margin-left: 10px;"> Diary List</span></h3>
+         <br>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -92,15 +93,15 @@
         </div>
           
           
-	    {% if pagination %}
-	        <div class="row-fluid" align="center">
-	            <div class="span12">
-	            <p>
-	                {% from "_pagehelpers.html" import render_pagination %}
-	                {{ render_pagination(pagination) }}
-	            </p>
-	            </div>
-	        </div>
+          {% if pagination %}
+            <div class="row-fluid" align="center">
+                <div class="span12">
+                <p>
+                    {% from "_pagehelpers.html" import render_pagination %}
+                    {{ render_pagination(pagination) }}
+                </p>
+                </div>
+            </div>
         {% else %}
         <!-- do nothing! -->
         {% endif %}
