@@ -31,7 +31,7 @@ class DBManager:
 
     @staticmethod 
     def init_db(): 
-        from simulation.model import member, link, diary, file
+        from simulation.model import member, diary, file
         from simulation.model import Base 
         
 category_dao = None
