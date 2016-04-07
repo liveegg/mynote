@@ -60,19 +60,8 @@
               {% for diary in tDiary %}
                 <tr>
                   <td style="padding-left:25px; width:10%; height:100px;">{{ diary.nNum }}</td>
-                  <td width="20%" valign="top">
-                  	<div style="position:absolute; width:200px; height:80px; overflow:auto;">
-    					 {{ diary.sTitle }}
-    				</div>
-                  	<!-- <pre class=pre-scrollable style="position:absolute; width:200px; height:80px; overflow:auto;">
- 						{{ diary.sTitle }}
- 					</pre> -->
- 				  </td>
-                  <td width="30%" valign="top">
-					<div style="position:absolute; width:500px; height:80px; overflow:auto;">
-    					 {{ diary.sContent }}
-    				</div>
-    			  </td>	
+                  <td width="20%" valign="top">{{ diary.sTitle }}</td>
+                  <td width="30%" valign="top">{{ diary.sContent }}</td>	
                   <td width="20%">{{ diary.dtWriteDate.strftime('%Y-%m-%d %H:%M') }}</td>
                   <td width="20%">
                   	<a class="btn btn-success btn-mini" href="/diary/update/{{ diary.nNum }}">
