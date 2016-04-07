@@ -7,6 +7,8 @@
 
 """
 
+import os
+
 from sqlalchemy import create_engine 
 from sqlalchemy.orm import scoped_session, sessionmaker 
 
@@ -19,7 +21,12 @@ class DBManager:
     @staticmethod 
     def init(db_bind, db_log_flag=True): 
 
-        DBManager.__db1_engine = create_engine(db_bind.get('local_db'), echo=db_log_flag)  
+        
+        if os.environ.get('RUNTIME_ENV') == 'production':
+            dsn = db_bind.get('production_db')
+        else:     
+            dsn = db_bind.get('local_db')
+        DBManager.__db1_engine = create_engine(dsn, echo=db_log_flag)  
         DBManager.__db1_session = scoped_session(sessionmaker(autocommit=False,  
                                         autoflush=False,  
                                         bind=DBManager.__db1_engine)) 
