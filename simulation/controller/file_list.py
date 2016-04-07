@@ -37,8 +37,6 @@ def upload_photo():
     
     form = FileUploadForm(request.form)
             
-    # HTTP POST로 요청이 오면 사용자 정보를 등록
-    # if form.validate():  
     #: Session에 저장된 사용자 정보를 셋팅
     sId = session['user_info'].sId
         
@@ -63,7 +61,8 @@ def upload_photo():
                 category_dao.rollback()
                 Log.error("Upload DB error : " + str(e))
                 raise e
-                
+            
+            #: 완전한 파일명
             newfileName = str(file.nNum) + "." + sType 
     
             #: 업로드 폴더 위치

@@ -13,7 +13,7 @@ class SimulationConfig(object):
 
      #: 데이터베이스 연결 URL
     DB_BINDS = {
-        'local_db': 'mysql+pymysql://root:hee5760@localhost:3306/dbMyNote?charset=utf8'
+        'local_db': 'mysql+pymysql://mynote:dusxks()*@localhost:3306/dbMyNote?charset=utf8'
     }
     DB_FILE_PATH= 'resource/database/mynote'
     #: 사진 업로드 시 사진이 임시로 저장되는 임시 폴더

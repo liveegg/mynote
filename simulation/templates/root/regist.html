@@ -41,6 +41,7 @@
 		
 		function info_check() {
 			
+			var regex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 			
 			if ($("#inputEmail").val() == "") {
 				alert("Email을 입력해주세요.");
@@ -48,6 +49,8 @@
 				alert("비밀번호를 입력해주세요.");
 			} else if ($("#inputPassword").val().length < 4 || $("#inputPassword").val().length > 8) {
 				alert("비밀번호는 4자리 이상 8자리 이하로 입력해주세요.");
+			} else if (!regex.test($("#inputEmail").val())){
+	    		alert("올바른 Email 형식을 입력해주세요.");
 			} else {
 				$.ajax({
 					url	: '/regist'
@@ -91,7 +94,7 @@
 						<h2 class="form-signin-heading"># Sign Up</h2>
 						<label for="inputEmail" class="sr-only">Email address</label>
 						<input type="email" id="inputEmail" class="form-control" placeholder="Email을 입력해주세요." required autofocus>
-						<input type="button" class="btn btn-primary btn-sm" id="idCheck" value="OK" onclick="javascript:fn_id_check();"/>
+						<input type="button" class="btn btn-primary" id="idCheck" value="중복 확인" onclick="javascript:fn_id_check();"/>
 						<label for="inputPassword" class="sr-only">Password</label>
 						<input type="password" id="inputPassword" class="form-control" placeholder="Password는 4~8자리로 입력해주세요." required>
 						<!-- <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:info_check();">Sign in</button> -->

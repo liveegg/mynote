@@ -116,9 +116,6 @@ def update(diary_id):
             raise e
     
     return "True"
-#             return redirect(url_for('.show_all'))
-#     else:
-#         return render_template('upload.html', photo=photo, form=form)
 
 
 
@@ -140,6 +137,7 @@ def remove(diary_id):
     """ DB에서 해당 데이터를 삭제한다."""
 
     sId = session['user_info'].sId
+    
     try:
         diary = category_dao.query(Diary).filter_by(nNum=str(diary_id)).first()
         category_dao.delete(diary)

@@ -71,11 +71,8 @@ def index():
 def login_form():
     """아이디/비밀번호 기반의 로그인 화면을 제공함 """
 
-    regist_sId = request.args.get('regist_sId', '')    
 
-    return render_template('/root/login.html',
-                           regist_sId=regist_sId)
-    
+    return render_template('/root/login.html')
     
 
 @simulationlog.route('/login', methods=['POST'])
@@ -91,7 +88,6 @@ def login():
     
         sId = form.sId.data
         sPassword = form.sPassword.data
-    #     next_url = form.next_url.data
         
         try:
             member = category_dao.query(Member).filter_by(sId=sId).first()
@@ -106,14 +102,9 @@ def login():
                 login_error = 'Invalid password'
                 return "False"
             else:
-                # 세션에 추가할 정보를 session 객체의 값으로 추가함
-                # 가령, User 클래스 같은 사용자 정보를 추가하는 객체 생성하고
-                # 사용자 정보를 구성하여 session 객체에 추가
+                # 세션에 사용자 정보 추가함
                 session['user_info'] = member
-    #             if next_url != '':
-    #                 return redirect(next_url)
-    #             else:
-    #                 return redirect(url_for('.index'))
+
         else:
             login_error = 'member does not exist!'
             return "False"
@@ -129,7 +120,6 @@ def logout():
     session.clear()
 
     return redirect('/login')
-#     return redirect(url_for('.login'))
 
 
 class LoginForm(Form):
@@ -138,17 +128,11 @@ class LoginForm(Form):
                          [validators.Required('사용자명을 입력하세요.'),
                           validators.Length(
                             min=4, 
-                            max=50 )])
+                            max=30 )])
     
-    sPassword = \
-        PasswordField('sPassword', 
+    sPassword = PasswordField('sPassword', 
                       [validators.Required('비밀번호를 입력하세요.'),
                        validators.Length(
                         min=4, 
                         max=8 )])
-        
-    
-    next_url = HiddenField('Next URL')
-
-    
         

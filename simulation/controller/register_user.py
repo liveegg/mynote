@@ -40,20 +40,13 @@ def register_user():
         category_dao.add(member)
         category_dao.commit()
     
-        Log.debug(member) 
+        Log.debug(member)
         
     except Exception as e:
         error = "DB error occurs : " + str(e)
         Log.error(error)
         category_dao.rollback()
         raise e
-    
-#     else:
-#         # 성공적으로 사용자 등록이 되면, 로그인 화면으로 이동.
-#         return redirect(url_for('.login', 
-#                                 regist_sId=sId)) 
-#     else:
-#         return render_template('/root/regist.html', form=form)
     
     return "True"
           
@@ -101,10 +94,6 @@ class RegisterForm(Form):
                         min=4,
                         max=8 )])
         
-    sPassword_confirm = PasswordField('Confirm Password')
     
-    sId_check = \
-        HiddenField('sId Check')
+    sId_check = HiddenField('sId Check')
     
-        
-                  

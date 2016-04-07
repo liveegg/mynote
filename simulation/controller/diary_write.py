@@ -36,14 +36,12 @@ def write_check():
   
     form = WriteForm(request.form)
 
-#     HTTP POST로 요청이 오면 사용자 정보를 등록
     if form.validate():  
         #: Session에 저장된 사용자 정보를 셋팅
         sId = session['user_info'].sId
-        sPassword = session['user_info'].sPassword
               
               
-            #: Form으로 넘어온 변수들의 값을 셋팅함
+        #: Form으로 넘어온 변수들의 값을 셋팅함
         sTitle = form.sTitle.data
         sContent = form.sContent.data
         dtWriteDate = datetime.today()
